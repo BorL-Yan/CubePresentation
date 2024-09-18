@@ -74,26 +74,85 @@ struct Vec3 {
 	Vec3(float X, float Y, float Z) :x(X), y(Y), z(Z) {};
 };
 
+class Cube {
+	CPoint cube[6][4];
 
+	Cube() {
 
-Vec3 RotationX(Vec3 rotating ,float angle) {
-	return Vec3(rotating.x,
-				rotating.y * (float)cos(angle * Pi / 180.0f) - rotating.z * (float)sin(angle * Pi / 180.0f),
-				rotating.z * (float)cos(angle * Pi / 180.0f) + rotating.y * (float)sin(angle * Pi / 180.0f));
+	}
+
+public:
+	void Rotation() {
+
+	}
+
+};
+
+void RotationX(Vec3 &rotating ,float angle) {
+	rotating = Vec3(rotating.x,
+		rotating.y * (float)cos(angle * Pi / 180.0f) - rotating.z * (float)sin(angle * Pi / 180.0f),
+		rotating.z * (float)cos(angle * Pi / 180.0f) + rotating.y * (float)sin(angle * Pi / 180.0f));
+
 }
 
-Vec3 RotationY(Vec3 rotating, float angle) {
-	return Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) + rotating.z * (float)sin(angle * Pi / 180.0f),
+void RotationY(Vec3 &rotating, float angle) {
+	rotating = Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) + rotating.z * (float)sin(angle * Pi / 180.0f),
 				rotating.y,
 				rotating.z * (float)cos(angle * Pi / 180.0f) - rotating.x * (float)sin(angle * Pi / 180.0f));
 }
 
-Vec3 RotationZ(Vec3 rotating, float angle) {
-	return Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) - rotating.y * (float)sin(angle * Pi / 180.0f),
+void RotationZ(Vec3 &rotating, float angle) {
+	rotating = Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) - rotating.y * (float)sin(angle * Pi / 180.0f),
 				rotating.y * (float)cos(angle * Pi / 180.0f) + rotating.x * (float)sin(angle * Pi / 180.0f),
 				rotating.z);
 }
 
+static void Rotation(Vec3 &rotation,float x, float y, float z) {
+	RotationX(rotation, x);
+	RotationY(rotation, y);
+	RotationZ(rotation, z);
+}
+
+void BackGround(CDC* pDC, int Height, int Width) {
+	CPen pen(PS_SOLID, 0, RGB(4, 13, 18));
+	CBrush brush(RGB(34, 40, 49));
+	
+	CPen* pOldPen = pDC->SelectObject(&pen);
+	CBrush* pOldBrush = pDC->SelectObject(&brush);
+
+	CRect background(0, 0, Height, Width);
+
+	pDC->Rectangle(&background);
+
+	pDC->SelectObject(pOldPen);
+	pDC->SelectObject(pOldBrush);
+}
+
+
+Vec3 CentreDistance(Vec3 vertecs, float distanseCentre, byte face) {
+	switch (face)
+	{
+		case 0:
+			vertecs.y -= distanseCentre;
+			break;
+		case 1:
+			vertecs.y += distanseCentre;
+			break;
+		case 2:
+			vertecs.x -= distanseCentre;
+			break;
+		case 3:
+			vertecs.z += distanseCentre;
+			break;
+		case 4:
+			vertecs.x += distanseCentre;
+			break;
+		case 5:
+			vertecs.z -= distanseCentre;
+			break;
+	}
+	return vertecs;
+}
 
 void CMFCDrawBoxView::OnDraw(CDC* pDC)
 {
@@ -106,11 +165,11 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 	GetClientRect(&clientRect);
 	int centerX = clientRect.Width() / 2;// +m_xPos;
 	int centerY = clientRect.Height() / 2;// +m_xPos;
-
+	BackGround(pDC, clientRect.Width(), clientRect.Height());
 	CPoint CubeFaces[6][4];
-	float zDistance[6] = {0};
+	float zBufer[6] = {0};
 
-	int size = 200; //m_xPos;
+	int size = 100; //m_xPos;
 	for (int j = 0; j < 6; j++)
 	{
 		Vec3 Vertecs[4]{
@@ -120,70 +179,66 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 			{-1, 1,1}
 		};
 
-		for (int k = 0; k < 4; k++){
+		for (int k = 0; k < 4; k++) {
 			// index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
 			switch (j)
 			{
 			case 0:
-				Vertecs[k] = RotationX(Vertecs[k], 10);
-				Vertecs[k] = RotationX(Vertecs[k], 90);
+				Rotation(Vertecs[k], 90, 0, 0);
 				break;
 
 			case 1:
-				Vertecs[k] = RotationX(Vertecs[k], 10);
-				Vertecs[k] = RotationX(Vertecs[k], -90);
+				Rotation(Vertecs[k], -90, 0, 0);
 				break;
 
 			case 2:
-				Vertecs[k] = RotationZ(Vertecs[k], -10);
-				Vertecs[k] = RotationY(Vertecs[k], -90);
+				Rotation(Vertecs[k], 0, -90, 0);
 				break;
 
 			case 3:
-				Vertecs[k] = RotationX(Vertecs[k], 10);
-				Vertecs[k] = RotationY(Vertecs[k], 0);
+				Rotation(Vertecs[k], 0, 0, 0);
 				break;
-
 			case 4:
-				Vertecs[k] = RotationZ(Vertecs[k], 10);
-				Vertecs[k] = RotationY(Vertecs[k], 90);
+				Rotation(Vertecs[k], 0, 90, 0);
 				break;
 
 			case 5:
-				Vertecs[k] = RotationX(Vertecs[k], -10);
-				Vertecs[k] = RotationY(Vertecs[k], 180);
+				Rotation(Vertecs[k], 0, 180, 0);
 				break;
-
 			}
-			Vertecs[k] = RotationX(Vertecs[k], 30);
+			//Rotation(Vertecs[k], 0, 90, 0);
 		}
-		float CoordinateZ[2] = { 0 };
 
+		float CoordinateZ[2] = { 0 };
 		for (int i = 0; i < 4; ++i)
 		{
-			int rotationCentr = 0;
+			//Global
+			Rotation(Vertecs[i], 0, m_angleY, 0);
 
-			Vec3 rotation = RotationY(Vec3(Vertecs[i].x + rotationCentr, Vertecs[i].y + rotationCentr, Vertecs[i].z), m_angleY);
+			//Local
+			Rotation(Vertecs[i], -20, 0, 0);
+
+			//Vec3 vertecs =  CentreDistance(Vertecs[i], 1, j);
 
 			if (i % 2 == 0) {
-				CoordinateZ[i/2] = rotation.z;
+				CoordinateZ[i/2] = Vertecs[i].z;
 			}
 			int distance = 5;
-			float z = 1 / (distance - rotation.z);
+			float z = 1 / (distance - Vertecs[i].z);
 
-			rotation = Vec3(rotation.x * z, rotation.y * z, 0);
+			Vec3(Vertecs[i].x * z, Vertecs[i].y * z, Vertecs[i].z);
 
-			CubeFaces[j][i].x = static_cast<int>(rotation.x * size) + centerX;
-			CubeFaces[j][i].y = static_cast<int>(rotation.y * size) + centerY;
+			CubeFaces[j][i].x = static_cast<int>(Vertecs[i].x * size) + centerX;
+			CubeFaces[j][i].y = static_cast<int>(Vertecs[i].y * size) + centerY;
 
 		}
-
-		zDistance[j] = (CoordinateZ[0] + CoordinateZ[1]) / 2;
+		
+		zBufer[j] = (CoordinateZ[0] + CoordinateZ[1]) / 2;
 	}
 
 	
-	CPen pen(PS_SOLID, 5, RGB(255, 0, 0)); 
-	CBrush brush(RGB(0, 0, 0));    
+	CPen pen(PS_SOLID, 2, RGB(238, 238, 238));
+	CBrush brush(RGB(118, 171, 174));
 
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush* pOldBrush = pDC->SelectObject(&brush);
@@ -192,9 +247,9 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 
 		for (int j = i + 1; j < 6; j++)
 		{
-			if (zDistance[i] > zDistance[j]) {
+			if (zBufer[i] > zBufer[j]) {
 
-				std::swap(zDistance[i], zDistance[j]);
+				std::swap(zBufer[i], zBufer[j]);
 				std::swap(CubeFaces[i], CubeFaces[j]);
 			}
 		}
@@ -229,7 +284,7 @@ void CMFCDrawBoxView::OnTimer(UINT_PTR nIDEvent) {
 
 #ifndef Rotation
 
-	m_angleY += 1.0f;
+	m_angleY += 3.0f ;
 	if (m_angleY == 360.f) m_angleY = 0.0f;
 
 #endif // !Rotation
