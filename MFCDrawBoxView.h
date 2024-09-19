@@ -15,7 +15,7 @@ protected:
 
 	int m_xPos;
 	BYTE m_bRight;
-	float m_angleY;
+	float m_angle;
 
 	UINT_PTR m_nTimer;
 	COLORREF m_backGroundColor;
