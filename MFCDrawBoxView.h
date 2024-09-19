@@ -21,6 +21,7 @@ protected:
 	COLORREF m_backGroundColor;
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void Update();
 	//afx_msg void OnDraw(CDC* pDC);
 
 
