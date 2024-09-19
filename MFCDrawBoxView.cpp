@@ -81,15 +81,25 @@ class Cube : Vec3 {
 public:
 	Vec3 cube[6][4];
 
-	float Centre;
+	Vec3 Center;
 	Vec3 AxisX;
 	Vec3 AxisY;
 	Vec3 AxisZ;
 
 	float zBufer[6];
 
+	int CubeSize;
+	float distance = 0;
 
-	Cube();
+	Vec3 Vertecs[4]{
+		{-1,-1,1},
+		{ 1,-1,1},
+		{ 1, 1,1},
+		{-1, 1,1}
+	};
+
+
+	Cube(Vec3 center, Vec3 localRotation,int size);
 
 
 	void GlobalRotation(Vec3 angle) {
@@ -104,6 +114,32 @@ public:
 			}
 			zBufer[i] = (CordinateZ[0] + CordinateZ[1]) / 2;
 		}
+	}
+	CPoint GetFace(int index) {
+		CPoint point[4];
+
+		for (int i = 0; i < 4; i++)
+		{
+			int distance = 5;
+			
+			float z = 1 / (distance - cube[index][i].z);
+
+			Vec3(cube[index][i].x * z, cube[index][i].y * z, cube[index][i].z);
+
+			point[i].x = static_cast<int>(cube[index][i].x * CubeSize) + Center.x;
+			point[i].y = static_cast<int>(cube[index][i].y * CubeSize) + Center.y;
+		
+		}
+		
+
+		return *point;
+	}
+
+
+private:
+
+	void multyplay() {
+		
 	}
 
 	void Rotation(Vec3& rotation, Vec3 angle) {
@@ -130,20 +166,13 @@ public:
 			rotating.z);
 	}
 
-	void GetFace(CPoint &face) {
-
-	}
 };
 
-Cube::Cube() {
+Cube::Cube(Vec3 center, Vec3 localRotation, int size)
+	:Center(center), CubeSize(size)
+{
 	for (int j = 0; j < 6; j++)
 	{
-		Vec3 Vertecs[4]{
-			{-1,-1,1},
-			{ 1,-1,1},
-			{ 1, 1,1},
-			{-1, 1,1}
-		};
 		for (int k = 0; k < 4; k++) {
 			// index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
 			switch (j)
@@ -171,7 +200,7 @@ Cube::Cube() {
 				Rotation(Vertecs[k], Vec3(0, 180, 0));
 				break;
 			}
-			Cube::cube[j][k] = Vertecs[j];
+			cube[j][k] = Vertecs[j];
 		}
 	}
 }
@@ -302,10 +331,13 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 	int centerY = clientRect.Height() / 2;// +m_xPos;
 	BackGround(pDC, clientRect.Width(), clientRect.Height());
 	CPoint CubeFaces[6][4];
-	Cube cube;
-	float zBufer[6] = {0};
-
+	
+	
+	
 	int size = 100; //m_xPos;
+	Cube cube(Vec3(centerX,centerY,0), Vec3(0,0,0), size);
+
+
 	/*
 	for (int j = 0; j < 6; j++)
 	{
@@ -375,7 +407,7 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 
 	cube.GlobalRotation(Vec3(m_angle,0,0));
 	
-	cube.GetFace(CubeFaces);
+	//cube.GetFace(CubeFaces);
 
 
 	
