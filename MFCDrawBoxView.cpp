@@ -12,6 +12,7 @@
 
 #include "MFCDrawBoxDoc.h"
 #include "MFCDrawBoxView.h"
+
 #include "iostream"
 #include <random>
 
@@ -46,11 +47,13 @@ END_MESSAGE_MAP()
 CMFCDrawBoxView::CMFCDrawBoxView() noexcept
 : m_xPos(50), m_bRight(true), m_angle(0.0f)
 {
+	m_Dragging = 1;
 	// TODO: add construction code here
 	
 
 	//cube.CubeSize = 0;
-	//cube((200, 200, 0), (0, 0, 0), 200);
+
+	cube(Vector3(200, 200, 0), Vector3(0, 0, 0), 200);
 }
 
 CMFCDrawBoxView::~CMFCDrawBoxView()
@@ -115,34 +118,6 @@ BOOL CMFCDrawBoxView::PreCreateWindow(CREATESTRUCT& cs)
 //	}
 //}
 
-//void Cube ::DebugeCube(Vector2* point, int index) {
-//	for (int i = 0; i < 4; i++)
-//	{
-//		int distance = 5;
-//
-//		auto vertecs = faces[index].vertecs[i];
-//
-//		float z = 1 / (distance - vertecs.z);
-//
-//		Vector3(vertecs.x * z, vertecs.y * z, vertecs.z);
-//
-//		point[i].x = static_cast<int>(vertecs.x * CubeSize) + Center.x;
-//		point[i].y = static_cast<int>(vertecs.y * CubeSize) + Center.y;
-//	}
-//}
-
-//void Cube::Sort() {
-//	for (int i = 0; i < 5; i++) {
-//		for (int j = i + 1; j < 6; j++)
-//		{
-//			if (zBufer[i] > zBufer[j]) {
-//
-//				std::swap(zBufer[i], zBufer[j]);
-//				std::swap(faces[i], faces[j]);
-//			}
-//		}
-//	}
-//}
 
  /*Cube::Cube(Vector3 center, Vector3 localRotation, int size)
 {*/
@@ -191,108 +166,6 @@ BOOL CMFCDrawBoxView::PreCreateWindow(CREATESTRUCT& cs)
 	}*/
 //}
 
-//Cube :: ~Cube() {
-//	delete(faces);
-//	delete(zBufer);
-//}
-
-	/*
-	void CreatCube() {
-		for (int j = 0; j < 6; j++)
-		{
-			Vector3 Vertecs[4]{
-				{-1,-1,1},
-				{ 1,-1,1},
-				{ 1, 1,1},
-				{-1, 1,1}
-			};
-
-			for (int k = 0; k < 4; k++) {
-				// index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
-				switch (j)
-				{
-				case 0:
-					Rotation(Vertecs[k], 90, 0, 0);
-					break;
-
-				case 1:
-					Rotation(Vertecs[k], -90, 0, 0);
-					break;
-
-				case 2:
-					Rotation(Vertecs[k], 0, -90, 0);
-					break;
-
-				case 3:
-					Rotation(Vertecs[k], 0, 0, 0);
-					break;
-				case 4:
-					Rotation(Vertecs[k], 0, 90, 0);
-					break;
-
-				case 5:
-					Rotation(Vertecs[k], 0, 180, 0);
-					break;
-				}
-				//Rotation(Vertecs[k], 0, 90, 0);
-			}
-		}
-	}
-	*/
-
-	/*
-	void RotationX(Vector3 &rotating ,float angle){
-		rotating = Vector3(rotating.x,
-			rotating.y * (float)cos(angle * Pi / 180.0f) - rotating.z * (float)sin(angle * Pi / 180.0f),
-			rotating.z * (float)cos(angle * Pi / 180.0f) + rotating.y * (float)sin(angle * Pi / 180.0f));
-
-	}
-
-	void RotationY(Vector3 &rotating, float angle) {
-		rotating = Vector3(rotating.x * (float)cos(angle * Pi / 180.0f) + rotating.z * (float)sin(angle * Pi / 180.0f),
-					rotating.y,
-					rotating.z * (float)cos(angle * Pi / 180.0f) - rotating.x * (float)sin(angle * Pi / 180.0f));
-	}
-
-	void RotationZ(Vector3 &rotating, float angle) {
-		rotating = Vector3(rotating.x * (float)cos(angle * Pi / 180.0f) - rotating.y * (float)sin(angle * Pi / 180.0f),
-					rotating.y * (float)cos(angle * Pi / 180.0f) + rotating.x * (float)sin(angle * Pi / 180.0f),
-					rotating.z);
-	}
-
-	static void Rotation(Vector3 &rotation,float x, float y, float z) {
-		RotationX(rotation, x);
-		RotationY(rotation, y);
-		RotationZ(rotation, z);
-	}
-	*/
-
-	/*
-	Vector3 CentreDistance(Vector3 vertecs, float distanseCentre, byte face) {
-		switch (face)
-		{
-			case 0:
-				vertecs.y -= distanseCentre;
-				break;
-			case 1:
-				vertecs.y += distanseCentre;
-				break;
-			case 2:
-				vertecs.x -= distanseCentre;
-				break;
-			case 3:
-				vertecs.z += distanseCentre;
-				break;
-			case 4:
-				vertecs.x += distanseCentre;
-				break;
-			case 5:
-				vertecs.z -= distanseCentre;
-				break;
-		}
-		return vertecs;
-	}
-	*/
 
 
 void BackGround(CDC* pDC, int Height, int Width) { //{
@@ -327,9 +200,8 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 	int centerX = clientRect.Width() / 2;// +m_xPos;
 	int centerY = clientRect.Height() / 2;// +m_xPos;
 	
-	BackGround(pDC, clientRect.Width(), clientRect.Height());
-
-	int size = 100; //m_xPos;
+	if(m_Dragging)
+		BackGround(pDC, clientRect.Width(), clientRect.Height());
 	
 
 
@@ -410,7 +282,7 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 	
 	
 
-	//cube.Sort();
+	cube.Sort();
 
 	//for (int i = 0; i < 6; i++)
 	//{
@@ -516,10 +388,3 @@ void CMFCDrawBoxView::OnInitialUpdate()
 }
 
 
-
-HBRUSH CMFCDrawBoxView::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
-{
-
-	return (HBRUSH)GetStockObject(m_backGroundColor);
-	
-}

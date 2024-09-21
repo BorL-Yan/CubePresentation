@@ -1,39 +1,18 @@
-﻿  MFCDrawBox.cpp
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,7): error C3646: 'cube': unknown override specifier
-  (compiling source file '/MFCDrawBox.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-  (compiling source file '/MFCDrawBox.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBox.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,40): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBox.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(116,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBox.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(117,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBox.cpp')
-  
-  MFCDrawBoxView.cpp
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,7): error C3646: 'cube': unknown override specifier
+﻿  MFCDrawBoxView.cpp
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\Plane.h(5,15): warning C4584: 'Plane': base-class 'Vector3' is already a base-class of 'Matrix4x4'
   (compiling source file '/MFCDrawBoxView.cpp')
+      C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\Vector3.h(2,7):
+      see declaration of 'Vector3'
+      C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\Matrix.h(9,7):
+      see declaration of 'Matrix4x4'
   
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\Cube.h(7,21): warning C4584: 'Cube': base-class 'Vector3' is already a base-class of 'Plane'
   (compiling source file '/MFCDrawBoxView.cpp')
+      C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\Vector3.h(2,7):
+      see declaration of 'Vector3'
+      C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\Plane.h(5,7):
+      see declaration of 'Plane'
   
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBoxView.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,40): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBoxView.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(116,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBoxView.cpp')
-  
-C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(117,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  (compiling source file '/MFCDrawBoxView.cpp')
-  
-  Generating Code...
+Cube.obj : error LNK2019: unresolved external symbol "void __cdecl std::swap<float,0>(float &,float &)" (??$swap@M$0A@@std@@YAXAEAM0@Z) referenced in function "public: void __cdecl Cube::Sort(void)" (?Sort@Cube@@QEAAXXZ)
+Cube.obj : error LNK2019: unresolved external symbol "void __cdecl std::swap<class Plane,0>(class Plane &,class Plane &)" (??$swap@VPlane@@$0A@@std@@YAXAEAVPlane@@0@Z) referenced in function "public: void __cdecl Cube::Sort(void)" (?Sort@Cube@@QEAAXXZ)
+C:\Users\Bor\source\repos\MFCDrawBox\x64\Debug\MFCDrawBox.exe : fatal error LNK1120: 2 unresolved externals
