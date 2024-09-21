@@ -1,2 +1,39 @@
-﻿  MFCDrawBoxView.cpp
-  MFCDrawBox.vcxproj -> D:\gr1_3\MFCDrawBox\x64\Debug\MFCDrawBox.exe
+﻿  MFCDrawBox.cpp
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,7): error C3646: 'cube': unknown override specifier
+  (compiling source file '/MFCDrawBox.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file '/MFCDrawBox.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBox.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,40): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBox.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(116,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBox.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(117,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBox.cpp')
+  
+  MFCDrawBoxView.cpp
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,7): error C3646: 'cube': unknown override specifier
+  (compiling source file '/MFCDrawBoxView.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(23,2): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+  (compiling source file '/MFCDrawBoxView.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,34): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBoxView.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(74,40): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBoxView.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(116,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBoxView.cpp')
+  
+C:\Users\Bor\source\repos\MFCDrawBox\MFCDrawBox\MFCDrawBoxView.h(117,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  (compiling source file '/MFCDrawBoxView.cpp')
+  
+  Generating Code...

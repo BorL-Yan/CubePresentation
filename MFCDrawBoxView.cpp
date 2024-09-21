@@ -13,13 +13,15 @@
 #include "MFCDrawBoxDoc.h"
 #include "MFCDrawBoxView.h"
 #include "iostream"
+#include <random>
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 using namespace std;
 
-#define Pi 3.14
+
 
 // CMFCDrawBoxView
 
@@ -45,19 +47,18 @@ CMFCDrawBoxView::CMFCDrawBoxView() noexcept
 : m_xPos(50), m_bRight(true), m_angle(0.0f)
 {
 	// TODO: add construction code here
-	m_Dragging = false;
-	m_HCross = AfxGetApp()->LoadStandardCursor(IDC_CROSS);
+	
 
-	m_backGroundColor = RGB(0, 0, 0);
-
+	//cube.CubeSize = 0;
+	//cube((200, 200, 0), (0, 0, 0), 200);
 }
 
 CMFCDrawBoxView::~CMFCDrawBoxView()
 {
-	if (m_nTimer != 0)
+	/*if (m_nTimer != 0)
 	{	
-		//KillTimer(m_nTimer);
-	}
+		KillTimer(m_nTimer);
+	}*/
 }
 
 BOOL CMFCDrawBoxView::PreCreateWindow(CREATESTRUCT& cs)
@@ -68,148 +69,138 @@ BOOL CMFCDrawBoxView::PreCreateWindow(CREATESTRUCT& cs)
 	return CView::PreCreateWindow(cs);
 }
 
+//void Cube::operator()(Vector3 center, Vector3 localRotation, int size) {
+//	Center = center;
+//	CubeSize = size;
+//	AxisX = Vector3(1, 0, 0);
+//	AxisY = Vector3(0, 1, 0);
+//	AxisZ = Vector3(0, 0, 1);
+//	for (int j = 0; j < 6; j++)
+//	{
+//		Vector3 Vertecs[4]{
+//			{-1,-1,1},
+//			{ 1,-1,1},
+//			{ 1, 1,1},
+//			{-1, 1,1}
+//		};
+//		for (int k = 0; k < 4; k++) {
+//			//index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
+//				switch (j)
+//				{
+//				case 0:
+//					Rotation(Vertecs[k], Vector3(90, 0, 0));
+//					break;
+//
+//				case 1:
+//					Rotation(Vertecs[k], Vector3(-90, 0, 0));
+//					break;
+//
+//				case 2:
+//					Rotation(Vertecs[k], Vector3(0, -90, 0));
+//					break;
+//
+//				case 3:
+//					Rotation(Vertecs[k], Vector3(0, 0, 0));
+//					break;
+//				case 4:
+//					Rotation(Vertecs[k], Vector3(0, 90, 0));
+//					break;
+//
+//				case 5:
+//					Rotation(Vertecs[k], Vector3(0, 180, 0));
+//					break;
+//				}
+//			this->faces[j].vertecs[k] = Vertecs[k];
+//		}
+//	}
+//}
 
-struct Vec3 {
-public:
-	float x, y, z;
-	Vec3();
-	Vec3(float X, float Y, float Z) :x(X), y(Y), z(Z) {};
-};
+//void Cube ::DebugeCube(Vector2* point, int index) {
+//	for (int i = 0; i < 4; i++)
+//	{
+//		int distance = 5;
+//
+//		auto vertecs = faces[index].vertecs[i];
+//
+//		float z = 1 / (distance - vertecs.z);
+//
+//		Vector3(vertecs.x * z, vertecs.y * z, vertecs.z);
+//
+//		point[i].x = static_cast<int>(vertecs.x * CubeSize) + Center.x;
+//		point[i].y = static_cast<int>(vertecs.y * CubeSize) + Center.y;
+//	}
+//}
 
+//void Cube::Sort() {
+//	for (int i = 0; i < 5; i++) {
+//		for (int j = i + 1; j < 6; j++)
+//		{
+//			if (zBufer[i] > zBufer[j]) {
+//
+//				std::swap(zBufer[i], zBufer[j]);
+//				std::swap(faces[i], faces[j]);
+//			}
+//		}
+//	}
+//}
 
-class Cube : Vec3 {
-public:
-	Vec3 cube[6][4];
-
-	Vec3 Center;
-	Vec3 AxisX;
-	Vec3 AxisY;
-	Vec3 AxisZ;
-
-	float zBufer[6];
-
-	int CubeSize;
-	float distance = 0;
-
-	Vec3 Vertecs[4]{
-		{-1,-1,1},
-		{ 1,-1,1},
-		{ 1, 1,1},
-		{-1, 1,1}
-	};
-
-
-	Cube(Vec3 center, Vec3 localRotation,int size);
-
-
-	void GlobalRotation(Vec3 angle) {
-		for (int i = 0; i < 6; i++) {
-			float CordinateZ[2];
-			for (int j = 0; j < 4; j++)
-			{
-				Rotation(cube[i][j], angle);
-				if (i % 2 == 0) {
-					CordinateZ[i / 2] = cube[i][j].z;
-				}
-			}
-			zBufer[i] = (CordinateZ[0] + CordinateZ[1]) / 2;
-		}
-	}
-	CPoint GetFace(int index) {
-		CPoint point[4];
-
-		for (int i = 0; i < 4; i++)
-		{
-			int distance = 5;
-			
-			float z = 1 / (distance - cube[index][i].z);
-
-			Vec3(cube[index][i].x * z, cube[index][i].y * z, cube[index][i].z);
-
-			point[i].x = static_cast<int>(cube[index][i].x * CubeSize) + Center.x;
-			point[i].y = static_cast<int>(cube[index][i].y * CubeSize) + Center.y;
-		
-		}
-		
-
-		return *point;
-	}
-
-
-private:
-
-	void multyplay() {
-		
-	}
-
-	void Rotation(Vec3& rotation, Vec3 angle) {
-		RotationX(rotation, angle.x);
-		RotationY(rotation, angle.y);
-		RotationZ(rotation, angle.z);
-	}
-	void RotationX(Vec3& rotating, float angle) {
-		rotating = Vec3(rotating.x,
-			rotating.y * (float)cos(angle * Pi / 180.0f) - rotating.z * (float)sin(angle * Pi / 180.0f),
-			rotating.z * (float)cos(angle * Pi / 180.0f) + rotating.y * (float)sin(angle * Pi / 180.0f));
-
-	}
-
-	void RotationY(Vec3& rotating, float angle) {
-		rotating = Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) + rotating.z * (float)sin(angle * Pi / 180.0f),
-			rotating.y,
-			rotating.z * (float)cos(angle * Pi / 180.0f) - rotating.x * (float)sin(angle * Pi / 180.0f));
-	}
-
-	void RotationZ(Vec3& rotating, float angle) {
-		rotating = Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) - rotating.y * (float)sin(angle * Pi / 180.0f),
-			rotating.y * (float)cos(angle * Pi / 180.0f) + rotating.x * (float)sin(angle * Pi / 180.0f),
-			rotating.z);
-	}
-
-};
-
-Cube::Cube(Vec3 center, Vec3 localRotation, int size)
-	:Center(center), CubeSize(size)
-{
+ /*Cube::Cube(Vector3 center, Vector3 localRotation, int size)
+{*/
+	/*Center = center;
+	CubeSize = size;
+	AxisX = Vector3(1, 0, 0);
+	AxisY = Vector3(0, 1, 0);
+	AxisZ = Vector3(0, 0, 1);
 	for (int j = 0; j < 6; j++)
 	{
+		Vector3 Vertecs[4]{
+			{-1,-1,1},
+			{ 1,-1,1},
+			{ 1, 1,1},
+			{-1, 1,1}
+		};
 		for (int k = 0; k < 4; k++) {
-			// index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
+			 index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
 			switch (j)
 			{
 			case 0:
-				Rotation(Vertecs[k], Vec3(90,0,0));
+				Rotation(Vertecs[k], Vector3(90,0,0));
 				break;
 
 			case 1:
-				Rotation(Vertecs[k], Vec3( - 90, 0, 0));
+				Rotation(Vertecs[k], Vector3( - 90, 0, 0));
 				break;
 
 			case 2:
-				Rotation(Vertecs[k], Vec3(0, -90, 0));
+				Rotation(Vertecs[k], Vector3(0, -90, 0));
 				break;
 
 			case 3:
-				Rotation(Vertecs[k], Vec3(0, 0, 0));
+				Rotation(Vertecs[k], Vector3(0, 0, 0));
 				break;
 			case 4:
-				Rotation(Vertecs[k], Vec3(0, 90, 0));
+				Rotation(Vertecs[k], Vector3(0, 90, 0));
 				break;
 
 			case 5:
-				Rotation(Vertecs[k], Vec3(0, 180, 0));
+				Rotation(Vertecs[k], Vector3(0, 180, 0));
 				break;
 			}
-			cube[j][k] = Vertecs[j];
+			this->faces[j].vertecs[k] = Vertecs[k];
 		}
-	}
-}
+	}*/
+//}
+
+//Cube :: ~Cube() {
+//	delete(faces);
+//	delete(zBufer);
+//}
 
 	/*
 	void CreatCube() {
 		for (int j = 0; j < 6; j++)
 		{
-			Vec3 Vertecs[4]{
+			Vector3 Vertecs[4]{
 				{-1,-1,1},
 				{ 1,-1,1},
 				{ 1, 1,1},
@@ -250,26 +241,26 @@ Cube::Cube(Vec3 center, Vec3 localRotation, int size)
 	*/
 
 	/*
-	void RotationX(Vec3 &rotating ,float angle){
-		rotating = Vec3(rotating.x,
+	void RotationX(Vector3 &rotating ,float angle){
+		rotating = Vector3(rotating.x,
 			rotating.y * (float)cos(angle * Pi / 180.0f) - rotating.z * (float)sin(angle * Pi / 180.0f),
 			rotating.z * (float)cos(angle * Pi / 180.0f) + rotating.y * (float)sin(angle * Pi / 180.0f));
 
 	}
 
-	void RotationY(Vec3 &rotating, float angle) {
-		rotating = Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) + rotating.z * (float)sin(angle * Pi / 180.0f),
+	void RotationY(Vector3 &rotating, float angle) {
+		rotating = Vector3(rotating.x * (float)cos(angle * Pi / 180.0f) + rotating.z * (float)sin(angle * Pi / 180.0f),
 					rotating.y,
 					rotating.z * (float)cos(angle * Pi / 180.0f) - rotating.x * (float)sin(angle * Pi / 180.0f));
 	}
 
-	void RotationZ(Vec3 &rotating, float angle) {
-		rotating = Vec3(rotating.x * (float)cos(angle * Pi / 180.0f) - rotating.y * (float)sin(angle * Pi / 180.0f),
+	void RotationZ(Vector3 &rotating, float angle) {
+		rotating = Vector3(rotating.x * (float)cos(angle * Pi / 180.0f) - rotating.y * (float)sin(angle * Pi / 180.0f),
 					rotating.y * (float)cos(angle * Pi / 180.0f) + rotating.x * (float)sin(angle * Pi / 180.0f),
 					rotating.z);
 	}
 
-	static void Rotation(Vec3 &rotation,float x, float y, float z) {
+	static void Rotation(Vector3 &rotation,float x, float y, float z) {
 		RotationX(rotation, x);
 		RotationY(rotation, y);
 		RotationZ(rotation, z);
@@ -277,7 +268,7 @@ Cube::Cube(Vec3 center, Vec3 localRotation, int size)
 	*/
 
 	/*
-	Vec3 CentreDistance(Vec3 vertecs, float distanseCentre, byte face) {
+	Vector3 CentreDistance(Vector3 vertecs, float distanseCentre, byte face) {
 		switch (face)
 		{
 			case 0:
@@ -306,7 +297,13 @@ Cube::Cube(Vec3 center, Vec3 localRotation, int size)
 
 void BackGround(CDC* pDC, int Height, int Width) { //{
 	CPen pen(PS_SOLID, 0, RGB(4, 13, 18));
-	CBrush brush(RGB(34, 40, 49));
+
+	//CBrush brush(RGB(34, 40, 49));
+	random_device rd;
+	uniform_int_distribution<int> dist(0, 256);
+
+
+	CBrush brush(RGB(dist(rd), dist(rd), dist(rd)));
 
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush* pOldBrush = pDC->SelectObject(&brush);
@@ -329,19 +326,17 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 	GetClientRect(&clientRect);
 	int centerX = clientRect.Width() / 2;// +m_xPos;
 	int centerY = clientRect.Height() / 2;// +m_xPos;
+	
 	BackGround(pDC, clientRect.Width(), clientRect.Height());
-	CPoint CubeFaces[6][4];
-	
-	
-	
+
 	int size = 100; //m_xPos;
-	Cube cube(Vec3(centerX,centerY,0), Vec3(0,0,0), size);
+	
 
 
 	/*
 	for (int j = 0; j < 6; j++)
 	{
-		Vec3 Vertecs[4]{
+		Vector3 Vertecs[4]{
 			{-1,-1,1},
 			{ 1,-1,1},
 			{ 1, 1,1},
@@ -349,7 +344,7 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 		};
 
 		for (int k = 0; k < 4; k++) {
-			// index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
+			 index :: 0 - Up, 1 - Down, 2 - Left, 3 - Front, 4 - Right, 5 - Back
 			switch (j)
 			{
 			case 0:
@@ -375,19 +370,19 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 				cube.Rotation(Vertecs[k], 0, 180, 0);
 				break;
 			}
-			//Rotation(Vertecs[k], 0, 90, 0);
+			Rotation(Vertecs[k], 0, 90, 0);
 		}
 
 		float CoordinateZ[2] = { 0 };
 		for (int i = 0; i < 4; ++i)
 		{
-			//Global
+			Global
 			Rotation(Vertecs[i], 0, m_angleY, 0);
 
-			//Local
+			Local
 			Rotation(Vertecs[i], -20, 0, 0);
 
-			//Vec3 vertecs =  CentreDistance(Vertecs[i], 1, j);
+			Vector3 vertecs =  CentreDistance(Vertecs[i], 1, j);
 
 			if (i % 2 == 0) {
 				CoordinateZ[i/2] = Vertecs[i].z;
@@ -395,7 +390,7 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 			int distance = 5;
 			float z = 1 / (distance - Vertecs[i].z);
 
-			Vec3(Vertecs[i].x * z, Vertecs[i].y * z, Vertecs[i].z);
+			Vector3(Vertecs[i].x * z, Vertecs[i].y * z, Vertecs[i].z);
 
 			CubeFaces[j][i].x = static_cast<int>(Vertecs[i].x * size) + centerX;
 			CubeFaces[j][i].y = static_cast<int>(Vertecs[i].y * size) + centerY;
@@ -405,11 +400,7 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 		zBufer[j] = (CoordinateZ[0] + CoordinateZ[1]) / 2;
 	}*/
 
-	cube.GlobalRotation(Vec3(m_angle,0,0));
-	
-	//cube.GetFace(CubeFaces);
-
-
+	//cube.GlobalRotation(Vector3(m_angle,0,0));
 	
 	CPen pen(PS_SOLID, 2, RGB(238, 238, 238));
 	CBrush brush(RGB(118, 171, 174));
@@ -417,27 +408,28 @@ void CMFCDrawBoxView::OnDraw(CDC* pDC)
 	CPen* pOldPen = pDC->SelectObject(&pen);
 	CBrush* pOldBrush = pDC->SelectObject(&brush);
 	
-	for (int i = 0; i < 5; i++) {
+	
 
-		for (int j = i + 1; j < 6; j++)
-		{
-			if (zBufer[i] > zBufer[j]) {
+	//cube.Sort();
 
-				std::swap(zBufer[i], zBufer[j]);
-				std::swap(CubeFaces[i], CubeFaces[j]);
-			}
-		}
-	}
+	//for (int i = 0; i < 6; i++)
+	//{
+	//	Vector2 vertecs[4];
+	//	cube.DebugeCube(vertecs, i);
 
-	for (int i = 0; i < 6; i++)
-	{
-		pDC->Polygon(CubeFaces[i], 4);
-	}
+	//	CPoint point[4];
+
+	//	for (byte i = 0; i < 4; i++)
+	//	{
+	//		point[i].x = vertecs[i].x;
+	//		point[i].y = vertecs[i].y;
+	//	}
+	//	pDC->Polygon(point, 4);
+	//}
 
 	pDC->SelectObject(pOldPen);
 	pDC->SelectObject(pOldBrush);
 
-	
 }
 
 void CMFCDrawBoxView::OnTimer(UINT_PTR nIDEvent) {
@@ -464,7 +456,7 @@ void CMFCDrawBoxView::OnTimer(UINT_PTR nIDEvent) {
 
 #endif // !Rotation
 
-	Invalidate();
+	//Invalidate();
 	CView::OnTimer(nIDEvent);
 }
 
@@ -515,11 +507,11 @@ void CMFCDrawBoxView::OnInitialUpdate()
 	CView::OnInitialUpdate();
 
 	// Устанавливаем таймер с интервалом 60 мс
-	m_nTimer = SetTimer(1, 60, NULL);
+	/*m_nTimer = SetTimer(1, 60, NULL);
 	if (m_nTimer == 0)
 	{
 		AfxMessageBox(_T("Error, Timer not Instantiet!!!"));
-	}
+	}*/
 	// TODO: Add your specialized code here and/or call the base class
 }
 
